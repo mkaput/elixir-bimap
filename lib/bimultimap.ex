@@ -421,7 +421,11 @@ defmodule BiMultiMap do
       {:ok, set} ->
         upd = MapSet.member?(set, value)
         set = MapSet.delete(set, value)
-        keys = put_in(keys[key], set)
+        keys = if MapSet.size(set) == 0 do
+            Map.delete(keys, key)
+          else
+            put_in(keys[key], set)
+          end
         {upd, keys}
       :error -> {false, keys}
     end
