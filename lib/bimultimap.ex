@@ -25,10 +25,10 @@ defmodule BiMultiMap do
   @type v :: any
 
   @opaque t(k, v) :: %BiMultiMap{
-    keys: %{optional(k) => MapSet.t(v)},
-    values: %{optional(v) => MapSet.t(k)},
-    size: non_neg_integer
-  }
+            keys: %{optional(k) => MapSet.t(v)},
+            values: %{optional(v) => MapSet.t(k)},
+            size: non_neg_integer
+          }
 
   @type t :: t(any, any)
 
@@ -55,11 +55,12 @@ defmodule BiMultiMap do
       iex> BiMultiMap.new([a: 1, a: 2])
       #BiMultiMap<[a: 1, a: 2]>
   """
-  @spec new(Enum.t) :: t
+  @spec new(Enum.t()) :: t
   def new(enumerable)
   def new(%BiMultiMap{} = bimultimap), do: bimultimap
+
   def new(enum) do
-    Enum.reduce(enum, new(), fn (pair, bimultimap) ->
+    Enum.reduce(enum, new(), fn pair, bimultimap ->
       BiMultiMap.put(bimultimap, pair)
     end)
   end
@@ -73,10 +74,11 @@ defmodule BiMultiMap do
       iex> BiMultiMap.new([1, 2, 1], fn x -> {x, x * 2} end)
       #BiMultiMap<[{1, 2}, {2, 4}]>
   """
-  @spec new(Enum.t, (term -> {k, v})) :: t
+  @spec new(Enum.t(), (term -> {k, v})) :: t
   def new(enumerable, transform)
+
   def new(enum, f) do
-    Enum.reduce(enum, new(), fn (term, bimultimap) ->
+    Enum.reduce(enum, new(), fn term, bimultimap ->
       BiMultiMap.put(bimultimap, f.(term))
     end)
   end
@@ -111,6 +113,7 @@ defmodule BiMultiMap do
   """
   @spec left(t) :: %{k => [v]}
   def left(bimultimap)
+
   def left(%BiMultiMap{keys: keys}) do
     for {k, vs} <- keys, into: %{} do
       {k, MapSet.to_list(vs)}
@@ -128,6 +131,7 @@ defmodule BiMultiMap do
   """
   @spec right(t) :: %{v => [k]}
   def right(bimultimap)
+
   def right(%BiMultiMap{values: values}) do
     for {v, ks} <- values, into: %{} do
       {v, MapSet.to_list(ks)}
@@ -175,6 +179,7 @@ defmodule BiMultiMap do
   """
   @spec member?(t, k, v) :: boolean
   def member?(bimultimap, key, value)
+
   def member?(%BiMultiMap{keys: keys}, key, value) do
     Map.has_key?(keys, key) and value in keys[key]
   end
@@ -199,6 +204,7 @@ defmodule BiMultiMap do
   """
   @spec has_key?(t, k) :: boolean
   def has_key?(bimultimap, key)
+
   def has_key?(%BiMultiMap{keys: keys}, left) do
     Map.has_key?(keys, left)
   end
@@ -216,6 +222,7 @@ defmodule BiMultiMap do
   """
   @spec has_value?(t, v) :: boolean
   def has_value?(bimultimap, value)
+
   def has_value?(%BiMultiMap{values: values}, value) do
     Map.has_key?(values, value)
   end
@@ -235,6 +242,7 @@ defmodule BiMultiMap do
   """
   @spec equal?(t, t) :: boolean
   def equal?(bimultimap1, bimultimap2)
+
   def equal?(%BiMultiMap{keys: keys1}, %BiMultiMap{keys: keys2}) do
     Map.equal?(keys1, keys2)
   end
@@ -262,10 +270,11 @@ defmodule BiMultiMap do
   """
   @spec get(t, k, any) :: [v] | any
   def get(bimultimap, key, default \\ [])
+
   def get(%BiMultiMap{keys: keys}, key, default) do
     case Map.fetch(keys, key) do
       {:ok, values} -> MapSet.to_list(values)
-      :error        -> default
+      :error -> default
     end
   end
 
@@ -290,10 +299,11 @@ defmodule BiMultiMap do
   """
   @spec get_keys(t, v, any) :: [k] | any
   def get_keys(bimultimap, value, default \\ [])
+
   def get_keys(%BiMultiMap{values: values}, value, default) do
     case Map.fetch(values, value) do
       {:ok, keys} -> MapSet.to_list(keys)
-      :error      -> default
+      :error -> default
     end
   end
 
@@ -317,10 +327,11 @@ defmodule BiMultiMap do
   """
   @spec fetch(t, k) :: {:ok, [v]} | :error
   def fetch(bimultimap, key)
+
   def fetch(%BiMultiMap{keys: keys}, key) do
     case Map.fetch(keys, key) do
       {:ok, values} -> {:ok, MapSet.to_list(values)}
-      :error      -> :error
+      :error -> :error
     end
   end
 
@@ -343,10 +354,11 @@ defmodule BiMultiMap do
   """
   @spec fetch_keys(t, v) :: {:ok, [k]} | :error
   def fetch_keys(bimultimap, value)
+
   def fetch_keys(%BiMultiMap{values: values}, value) do
     case Map.fetch(values, value) do
       {:ok, keys} -> {:ok, MapSet.to_list(keys)}
-      :error      -> :error
+      :error -> :error
     end
   end
 
@@ -368,12 +380,20 @@ defmodule BiMultiMap do
   """
   @spec put(t, k, v) :: t
   def put(
-    %BiMultiMap{keys: keys, values: values, size: size} = bimultimap,
-    key, value
-  ) do
+        %BiMultiMap{keys: keys, values: values, size: size} = bimultimap,
+        key,
+        value
+      ) do
     {upd, keys} = put_side(keys, key, value)
     {^upd, values} = put_side(values, value, key)
-    size = if upd do size + 1 else size end
+
+    size =
+      if upd do
+        size + 1
+      else
+        size
+      end
+
     %{bimultimap | keys: keys, values: values, size: size}
   end
 
@@ -407,12 +427,20 @@ defmodule BiMultiMap do
   """
   @spec delete(t, k, v) :: t
   def delete(
-    %BiMultiMap{keys: keys, values: values, size: size} = bimultimap,
-    key, value
-  ) do
+        %BiMultiMap{keys: keys, values: values, size: size} = bimultimap,
+        key,
+        value
+      ) do
     {upd, keys} = delete_side(keys, key, value)
     {^upd, values} = delete_side(values, value, key)
-    size = if upd do size - 1 else size end
+
+    size =
+      if upd do
+        size - 1
+      else
+        size
+      end
+
     %{bimultimap | keys: keys, values: values, size: size}
   end
 
@@ -421,13 +449,18 @@ defmodule BiMultiMap do
       {:ok, set} ->
         upd = MapSet.member?(set, value)
         set = MapSet.delete(set, value)
-        keys = if MapSet.size(set) == 0 do
+
+        keys =
+          if MapSet.size(set) == 0 do
             Map.delete(keys, key)
           else
             put_in(keys[key], set)
           end
+
         {upd, keys}
-      :error -> {false, keys}
+
+      :error ->
+        {false, keys}
     end
   end
 
@@ -501,6 +534,7 @@ defmodule BiMultiMap do
   """
   @spec to_list(t) :: [{k, v}]
   def to_list(bimultimap)
+
   def to_list(%BiMultiMap{keys: keys}) do
     for {k, vs} <- keys, v <- vs do
       {k, v}
@@ -523,11 +557,12 @@ defmodule BiMultiMap do
 
   defimpl Collectable do
     def into(original) do
-      {original, fn
-        bimultimap, {:cont, pair} -> BiMultiMap.put(bimultimap, pair)
-        bimultimap, :done -> bimultimap
-        _, :halt -> :ok
-      end}
+      {original,
+       fn
+         bimultimap, {:cont, pair} -> BiMultiMap.put(bimultimap, pair)
+         bimultimap, :done -> bimultimap
+         _, :halt -> :ok
+       end}
     end
   end
 
@@ -535,11 +570,11 @@ defmodule BiMultiMap do
     import Inspect.Algebra
 
     def inspect(bimultimap, opts) do
-      concat [
+      concat([
         "#BiMultiMap<",
         Inspect.List.inspect(BiMultiMap.to_list(bimultimap), opts),
         ">"
-      ]
+      ])
     end
   end
 end

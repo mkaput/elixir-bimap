@@ -34,9 +34,9 @@ defmodule BiMap do
   @type v :: any
 
   @opaque t(k, v) :: %BiMap{
-    keys: %{optional(k) => v},
-    values: %{optional(v) => k}
-  }
+            keys: %{optional(k) => v},
+            values: %{optional(v) => k}
+          }
 
   @type t :: t(any, any)
 
@@ -63,11 +63,12 @@ defmodule BiMap do
       iex> BiMap.new([a: "foo", b: "bar"])
       #BiMap<[a: "foo", b: "bar"]>
   """
-  @spec new(Enum.t) :: t
+  @spec new(Enum.t()) :: t
   def new(enumerable)
   def new(%BiMap{} = bimap), do: bimap
+
   def new(enum) do
-    Enum.reduce(enum, new(), fn (pair, bimap) ->
+    Enum.reduce(enum, new(), fn pair, bimap ->
       BiMap.put(bimap, pair)
     end)
   end
@@ -81,10 +82,11 @@ defmodule BiMap do
       iex> BiMap.new([1, 2, 1], fn x -> {x, x * 2} end)
       #BiMap<[{1, 2}, {2, 4}]>
   """
-  @spec new(Enum.t, (term -> {k, v})) :: t
+  @spec new(Enum.t(), (term -> {k, v})) :: t
   def new(enumerable, transform)
+
   def new(enum, f) do
-    Enum.reduce(enum, new(), fn (term, bimap) ->
+    Enum.reduce(enum, new(), fn term, bimap ->
       BiMap.put(bimap, f.(term))
     end)
   end
@@ -105,6 +107,7 @@ defmodule BiMap do
   """
   @spec size(t) :: non_neg_integer
   def size(bimap)
+
   def size(%BiMap{keys: keys}) do
     map_size(keys)
   end
@@ -174,6 +177,7 @@ defmodule BiMap do
   """
   @spec member?(t, k, v) :: boolean
   def member?(bimap, key, value)
+
   def member?(%BiMap{keys: keys}, key, value) do
     Map.has_key?(keys, key) and keys[key] === value
   end
@@ -198,6 +202,7 @@ defmodule BiMap do
   """
   @spec has_key?(t, k) :: boolean
   def has_key?(bimap, key)
+
   def has_key?(%BiMap{keys: keys}, left) do
     Map.has_key?(keys, left)
   end
@@ -215,6 +220,7 @@ defmodule BiMap do
   """
   @spec has_value?(t, v) :: boolean
   def has_value?(bimap, value)
+
   def has_value?(%BiMap{values: values}, value) do
     Map.has_key?(values, value)
   end
@@ -234,6 +240,7 @@ defmodule BiMap do
   """
   @spec equal?(t, t) :: boolean
   def equal?(bimap1, bimap2)
+
   def equal?(%BiMap{keys: keys1}, %BiMap{keys: keys2}) do
     Map.equal?(keys1, keys2)
   end
@@ -258,6 +265,7 @@ defmodule BiMap do
   """
   @spec get(t, k, v) :: v
   def get(bimap, key, default \\ nil)
+
   def get(%BiMap{keys: keys}, key, default) do
     Map.get(keys, key, default)
   end
@@ -281,6 +289,7 @@ defmodule BiMap do
   """
   @spec get_key(t, v, k) :: k
   def get_key(bimap, value, default \\ nil)
+
   def get_key(%BiMap{values: values}, value, default) do
     Map.get(values, value, default)
   end
@@ -303,6 +312,7 @@ defmodule BiMap do
   """
   @spec fetch(t, k) :: {:ok, v} | :error
   def fetch(bimap, key)
+
   def fetch(%BiMap{keys: keys}, key) do
     Map.fetch(keys, key)
   end
@@ -324,6 +334,7 @@ defmodule BiMap do
   """
   @spec fetch_key(t, v) :: {:ok, k} | :error
   def fetch_key(bimap, value)
+
   def fetch_key(%BiMap{values: values}, value) do
     Map.fetch(values, value)
   end
@@ -343,9 +354,7 @@ defmodule BiMap do
   """
   @spec put(t, k, v) :: t
   def put(%BiMap{keys: keys, values: values} = bimap, key, value) do
-    %{bimap |
-      keys: Map.put(keys, key, value),
-      values: Map.put(values, value, key)}
+    %{bimap | keys: Map.put(keys, key, value), values: Map.put(values, value, key)}
   end
 
   @doc """
@@ -375,9 +384,7 @@ defmodule BiMap do
   def delete(%BiMap{keys: keys, values: values} = bimap, key, value) do
     case Map.fetch(keys, key) do
       {:ok, ^value} ->
-        %{bimap |
-          keys: Map.delete(keys, key),
-          values: Map.delete(values, value)}
+        %{bimap | keys: Map.delete(keys, key), values: Map.delete(values, value)}
 
       _ ->
         bimap
@@ -401,9 +408,7 @@ defmodule BiMap do
   def delete_key(%BiMap{keys: keys, values: values} = bimap, key) do
     case Map.fetch(keys, key) do
       {:ok, value} ->
-        %{bimap |
-          keys: Map.delete(keys, key),
-          values: Map.delete(values, value)}
+        %{bimap | keys: Map.delete(keys, key), values: Map.delete(values, value)}
 
       :error ->
         bimap
@@ -427,9 +432,7 @@ defmodule BiMap do
   def delete_value(%BiMap{keys: keys, values: values} = bimap, value) do
     case Map.fetch(values, value) do
       {:ok, key} ->
-        %{bimap |
-          keys: Map.delete(keys, key),
-          values: Map.delete(values, value)}
+        %{bimap | keys: Map.delete(keys, key), values: Map.delete(values, value)}
 
       :error ->
         bimap
@@ -454,6 +457,7 @@ defmodule BiMap do
   """
   @spec to_list(t) :: [{k, v}]
   def to_list(bimap)
+
   def to_list(%BiMap{keys: keys}) do
     Map.to_list(keys)
   end
@@ -474,11 +478,12 @@ defmodule BiMap do
 
   defimpl Collectable do
     def into(original) do
-      {original, fn
-        bimap, {:cont, pair} -> BiMap.put(bimap, pair)
-        bimap, :done -> bimap
-        _, :halt -> :ok
-      end}
+      {original,
+       fn
+         bimap, {:cont, pair} -> BiMap.put(bimap, pair)
+         bimap, :done -> bimap
+         _, :halt -> :ok
+       end}
     end
   end
 
@@ -486,7 +491,7 @@ defmodule BiMap do
     import Inspect.Algebra
 
     def inspect(bimap, opts) do
-      concat ["#BiMap<", Inspect.List.inspect(BiMap.to_list(bimap), opts), ">"]
+      concat(["#BiMap<", Inspect.List.inspect(BiMap.to_list(bimap), opts), ">"])
     end
   end
 end
