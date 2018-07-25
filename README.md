@@ -11,7 +11,7 @@ The package can be installed by adding `bimap` to your list of dependencies in `
 
 ```elixir
 def deps do
-  [{:bimap, "~> 0.1"}]
+  [{:bimap, "~> 1.0"}]
 end
 ```
 
