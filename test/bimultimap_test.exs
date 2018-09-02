@@ -1,5 +1,5 @@
 defmodule BiMultiMapTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest BiMultiMap
 
   test "size is correctly computed on put" do
