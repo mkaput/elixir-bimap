@@ -5,8 +5,7 @@ defmodule BiMultiMapPropertiesTest do
 
   property "finds present items in bimultimap" do
     check all key_set <- nonempty(list_of(term())),
-      value_set <- list_of(term(), length: Enum.count(key_set)) do
-
+              value_set <- list_of(term(), length: Enum.count(key_set)) do
       kv_list = Enum.zip(key_set, value_set) |> MapSet.new()
       bimultimap = BiMultiMap.new(kv_list)
       {random_key, random_value} = Enum.random(bimultimap)
@@ -31,8 +30,7 @@ defmodule BiMultiMapPropertiesTest do
 
   property "deletes items from bimultimap" do
     check all key_set <- nonempty(list_of(term())),
-      value_set <- list_of(term(), length: Enum.count(key_set)) do
-
+              value_set <- list_of(term(), length: Enum.count(key_set)) do
       kv_list = Enum.zip(key_set, value_set) |> MapSet.new()
       bimultimap = BiMultiMap.new(kv_list)
       {random_key, random_value} = Enum.random(bimultimap)
@@ -57,8 +55,7 @@ defmodule BiMultiMapPropertiesTest do
 
   property "it turns bimultimaps into lists" do
     check all key_set <- nonempty(uniq_list_of(term())),
-      value_set <- list_of(term(), length: Enum.count(key_set)) do
-
+              value_set <- list_of(term(), length: Enum.count(key_set)) do
       kv_list = Enum.zip(key_set, value_set) |> MapSet.new()
       bimultimap = BiMultiMap.new(kv_list)
 
@@ -68,11 +65,9 @@ defmodule BiMultiMapPropertiesTest do
 
   property "it puts items into bimultimaps" do
     check all key_set <- nonempty(uniq_list_of(term())),
-      value_set <- list_of(term(), length: Enum.count(key_set)),
-      random_key <- term(),
-      random_value <- term()
-      do
-
+              value_set <- list_of(term(), length: Enum.count(key_set)),
+              random_key <- term(),
+              random_value <- term() do
       kv_list = Enum.zip(key_set, value_set) |> MapSet.new()
       bimultimap = BiMultiMap.new(kv_list)
 

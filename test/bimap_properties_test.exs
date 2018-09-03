@@ -4,8 +4,7 @@ defmodule BiMapPropertiesTest do
 
   property "finds present items in bimap" do
     check all key_set <- nonempty(uniq_list_of(term())),
-      value_set <- uniq_list_of(term(), length: Enum.count(key_set)) do
-
+              value_set <- uniq_list_of(term(), length: Enum.count(key_set)) do
       regular_map = Enum.zip(key_set, value_set) |> Enum.into(%{})
       bimap = BiMap.new(regular_map)
       {random_key, random_value} = Enum.random(regular_map)
@@ -17,23 +16,36 @@ defmodule BiMapPropertiesTest do
 
   property "deletes items from bimap" do
     check all key_set <- nonempty(uniq_list_of(term())),
-      value_set <- uniq_list_of(term(), length: Enum.count(key_set)) do
-
+              value_set <- uniq_list_of(term(), length: Enum.count(key_set)) do
       regular_map = Enum.zip(key_set, value_set) |> Enum.into(%{})
       bimap = BiMap.new(regular_map)
       {random_key, random_value} = Enum.random(regular_map)
 
-      assert BiMap.equal?(BiMap.delete(bimap, {random_key, random_value}), Map.delete(regular_map, random_key) |> BiMap.new())
-      assert BiMap.equal?(BiMap.delete(bimap, random_key, random_value), Map.delete(regular_map, random_key) |> BiMap.new())
-      assert BiMap.equal?(BiMap.delete_key(bimap, random_key), Map.delete(regular_map, random_key) |> BiMap.new())
-      assert BiMap.equal?(BiMap.delete_value(bimap, random_value), Map.delete(regular_map, random_key) |> BiMap.new())
+      assert BiMap.equal?(
+               BiMap.delete(bimap, {random_key, random_value}),
+               Map.delete(regular_map, random_key) |> BiMap.new()
+             )
+
+      assert BiMap.equal?(
+               BiMap.delete(bimap, random_key, random_value),
+               Map.delete(regular_map, random_key) |> BiMap.new()
+             )
+
+      assert BiMap.equal?(
+               BiMap.delete_key(bimap, random_key),
+               Map.delete(regular_map, random_key) |> BiMap.new()
+             )
+
+      assert BiMap.equal?(
+               BiMap.delete_value(bimap, random_value),
+               Map.delete(regular_map, random_key) |> BiMap.new()
+             )
     end
   end
 
   property "it turns bimaps into lists" do
     check all key_set <- nonempty(uniq_list_of(term())),
-      value_set <- uniq_list_of(term(), length: Enum.count(key_set)) do
-
+              value_set <- uniq_list_of(term(), length: Enum.count(key_set)) do
       regular_map = Enum.zip(key_set, value_set) |> Enum.into(%{})
       bimap = BiMap.new(regular_map)
 
@@ -43,11 +55,9 @@ defmodule BiMapPropertiesTest do
 
   property "it puts items into bimaps" do
     check all key_set <- nonempty(uniq_list_of(term())),
-      value_set <- uniq_list_of(term(), length: Enum.count(key_set)),
-      random_key <- term(),
-      random_value <- term()
-      do
-
+              value_set <- uniq_list_of(term(), length: Enum.count(key_set)),
+              random_key <- term(),
+              random_value <- term() do
       regular_map = Enum.zip(key_set, value_set) |> Enum.into(%{})
       bimap = BiMap.new(regular_map)
 
