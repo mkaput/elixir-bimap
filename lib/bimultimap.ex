@@ -553,6 +553,10 @@ defmodule BiMultiMap do
     def count(bimultimap) do
       {:ok, BiMultiMap.size(bimultimap)}
     end
+
+    def slice(_bimultimap) do
+      {:error, __MODULE__}
+    end
   end
 
   defimpl Collectable do
