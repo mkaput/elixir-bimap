@@ -349,8 +349,12 @@ defmodule BiMap do
 
       iex> bimap = BiMap.new
       #BiMap<[]>
-      iex> BiMap.put(bimap, :a, "foo")
-      #BiMap<[a: "foo"]>
+      iex> bimap = BiMap.put(bimap, :a, 0)
+      #BiMap<[a: 0]>
+      iex> bimap = BiMap.put(bimap, :a, 1)
+      #BiMap<[a: 1]>
+      iex> BiMap.put(bimap, :b, 1)
+      #BiMap<[b: 1]>
   """
   @spec put(t, k, v) :: t
   def put(%BiMap{keys: keys, values: values} = bimap, key, value) do
