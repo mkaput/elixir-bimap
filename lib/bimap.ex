@@ -357,7 +357,8 @@ defmodule BiMap do
       #BiMap<[b: 1]>
   """
   @spec put(t, k, v) :: t
-  def put(%BiMap{keys: keys, values: values} = bimap, key, value) do
+  def put(%BiMap{} = bimap, key, value) do
+    %{keys: keys, values: values} = bimap |> BiMap.delete_key(key) |> BiMap.delete_value(value)
     %{bimap | keys: Map.put(keys, key, value), values: Map.put(values, value, key)}
   end
 
