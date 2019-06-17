@@ -54,8 +54,8 @@ defmodule BiMapPropertiesTest do
   end
 
   property "it puts items into bimaps" do
-    check all key_set <- nonempty(uniq_list_of(term())),
-              value_set <- uniq_list_of(term(), length: Enum.count(key_set)),
+    check all key_set <- nonempty(uniq_list_of(atom(:alphanumeric))),
+              value_set <- uniq_list_of(integer(), length: Enum.count(key_set)),
               random_key <- term(),
               random_value <- term() do
       regular_map = Enum.zip(key_set, value_set) |> Enum.into(%{})
