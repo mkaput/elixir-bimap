@@ -474,6 +474,10 @@ defmodule BiMap do
     def count(bimap) do
       {:ok, BiMap.size(bimap)}
     end
+
+    def slice(_bimap) do
+      {:error, __MODULE__}
+    end
   end
 
   defimpl Collectable do
