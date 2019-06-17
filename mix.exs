@@ -1,7 +1,7 @@
 defmodule BiMap.Mixfile do
   use Mix.Project
 
-  @version "1.0.0"
+  @version "1.0.1"
   @github "https://github.com/mkaput/elixir-bimap"
 
   def project do
