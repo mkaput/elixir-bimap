@@ -1,0 +1,10 @@
+language: elixir
+sudo: false
+
+matrix:
+  include:
+    - elixir: '1.8'
+
+    # Our dev tools do not work on <1.5, and this is the oldest working combination on Travis
+    - elixir: '1.5'
+      otp_release: '19.0'

@@ -2,6 +2,7 @@
 
 [![Hex.pm](https://img.shields.io/hexpm/v/bimap.svg)](https://hex.pm/packages/bimap)
 [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/bimap/)
+[![Build Status](https://travis-ci.com/mkaput/elixir-bimap.svg?branch=master)](https://travis-ci.com/mkaput/elixir-bimap)
 
 Elixir implementation of bidirectional map and multimap.
 
