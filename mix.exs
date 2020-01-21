@@ -31,7 +31,7 @@ defmodule BiMap.Mixfile do
   defp deps do
     [
       # Development dependencies
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
       {:stream_data, "~> 0.1", only: :test}
