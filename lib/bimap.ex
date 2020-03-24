@@ -318,6 +318,26 @@ defmodule BiMap do
   end
 
   @doc """
+  Fetches the value for specific `key` in `bimap`.
+
+  Raises `ArgumentError` if the key is absent.
+
+  ## Examples
+
+      iex> bimap = BiMap.new([a: 1])
+      iex> BiMap.fetch!(bimap, :a)
+      1
+  """
+  @spec fetch!(t, k) :: v
+  def fetch!(bimap, key)
+
+  def fetch!(%BiMap{keys: keys} = bimap, key) do
+    Map.get_lazy(keys, key, fn ->
+      raise ArgumentError, "key #{inspect(key)} not found in: #{inspect(bimap)}"
+    end)
+  end
+
+  @doc """
   Fetches the key for specific `value` in `bimap`
 
   This function is exact mirror of `fetch/2`.
@@ -337,6 +357,26 @@ defmodule BiMap do
 
   def fetch_key(%BiMap{values: values}, value) do
     Map.fetch(values, value)
+  end
+
+  @doc """
+  Fetches the key for specific `value` in `bimap`.
+
+  Raises `ArgumentError` if the value is absent. This function is exact mirror of `fetch!/2`.
+
+  ## Examples
+
+      iex> bimap = BiMap.new([a: 1])
+      iex> BiMap.fetch_key!(bimap, 1)
+      :a
+  """
+  @spec fetch_key!(t, v) :: k
+  def fetch_key!(bimap, value)
+
+  def fetch_key!(%BiMap{values: values} = bimap, value) do
+    Map.get_lazy(values, value, fn ->
+      raise ArgumentError, "value #{inspect(value)} not found in: #{inspect(bimap)}"
+    end)
   end
 
   @doc """
