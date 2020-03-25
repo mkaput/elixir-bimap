@@ -336,6 +336,29 @@ defmodule BiMultiMap do
   end
 
   @doc """
+  Fetches all values for specific `key` in `bimultimap`
+
+  Raises `ArgumentError` if the key is absent.
+
+  ## Examples
+
+      iex> bimultimap = BiMultiMap.new([a: 1, c: 1, c: 2])
+      iex> BiMultiMap.fetch!(bimultimap, :a)
+      [1]
+      iex> BiMultiMap.fetch!(bimultimap, :c)
+      [1, 2]
+  """
+  @spec fetch!(t, k) :: [v]
+  def fetch!(bimultimap, key)
+
+  def fetch!(bimultimap, key) do
+    case fetch(bimultimap, key) do
+      {:ok, values} -> values
+      :error -> raise ArgumentError, "key #{inspect(key)} not found in: #{inspect(bimultimap)}"
+    end
+  end
+
+  @doc """
   Fetches all keys for specific `value` in `bimultimap`
 
   This function is exact mirror of `fetch/2`.
@@ -359,6 +382,32 @@ defmodule BiMultiMap do
     case Map.fetch(values, value) do
       {:ok, keys} -> {:ok, MapSet.to_list(keys)}
       :error -> :error
+    end
+  end
+
+  @doc """
+  Fetches all keys for specific `value` in `bimultimap`
+
+  Raises `ArgumentError` if the key is absent. This function is exact mirror of `fetch!/2`.
+
+  ## Examples
+
+      iex> bimultimap = BiMultiMap.new([a: 1, c: 3, d: 3])
+      iex> BiMultiMap.fetch_keys!(bimultimap, 1)
+      [:a]
+      iex> BiMultiMap.fetch_keys!(bimultimap, 3)
+      [:c, :d]
+  """
+  @spec fetch_keys!(t, v) :: [k]
+  def fetch_keys!(bimultimap, value)
+
+  def fetch_keys!(bimultimap, value) do
+    case fetch_keys(bimultimap, value) do
+      {:ok, keys} ->
+        keys
+
+      :error ->
+        raise ArgumentError, "value #{inspect(value)} not found in: #{inspect(bimultimap)}"
     end
   end
 
