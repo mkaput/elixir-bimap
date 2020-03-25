@@ -331,10 +331,11 @@ defmodule BiMap do
   @spec fetch!(t, k) :: v
   def fetch!(bimap, key)
 
-  def fetch!(%BiMap{keys: keys} = bimap, key) do
-    Map.get_lazy(keys, key, fn ->
-      raise ArgumentError, "key #{inspect(key)} not found in: #{inspect(bimap)}"
-    end)
+  def fetch!(bimap, key) do
+    case fetch(bimap, key) do
+      {:ok, value} -> value
+      :error -> raise ArgumentError, "key #{inspect(key)} not found in: #{inspect(bimap)}"
+    end
   end
 
   @doc """
@@ -373,10 +374,11 @@ defmodule BiMap do
   @spec fetch_key!(t, v) :: k
   def fetch_key!(bimap, value)
 
-  def fetch_key!(%BiMap{values: values} = bimap, value) do
-    Map.get_lazy(values, value, fn ->
-      raise ArgumentError, "value #{inspect(value)} not found in: #{inspect(bimap)}"
-    end)
+  def fetch_key!(bimap, value) do
+    case fetch_key(bimap, value) do
+      {:ok, key} -> key
+      :error -> raise ArgumentError, "value #{inspect(value)} not found in: #{inspect(bimap)}"
+    end
   end
 
   @doc """
