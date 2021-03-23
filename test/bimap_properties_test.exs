@@ -63,7 +63,7 @@ defmodule BiMapPropertiesTest do
 
       put_regular_map =
         regular_map
-        |> Enum.reject(fn {_, v} -> v == random_value end)
+        |> Enum.reject(fn {_, v} -> v === random_value end)
         |> Enum.into(%{})
         |> Map.put(random_key, random_value)
 
