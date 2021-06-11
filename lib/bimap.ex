@@ -412,6 +412,66 @@ defmodule BiMap do
   def put(bimap, {key, value}), do: put(bimap, key, value)
 
   @doc """
+  Inserts `{key, value}` pair into `bimap` if `key` is not already in `bimap`.
+
+  If `key` already exists in `bimap`, `bimap` is returned unchanged.
+
+  If `key` does not exist and `value` is already in `bimap`, any overlapping bindings are
+  deleted.
+
+  ## Examples
+
+      iex> bimap = BiMap.new
+      #BiMap<[]>
+      iex> bimap = BiMap.put_new_key(bimap, :a, 0)
+      #BiMap<[a: 0]>
+      iex> bimap = BiMap.put_new_key(bimap, :a, 1)
+      #BiMap<[a: 0]>
+      iex> BiMap.put_new_key(bimap, :b, 1)
+      #BiMap<[a: 0, b: 1]>
+      iex> BiMap.put_new_key(bimap, :c, 1)
+      #BiMap<[a: 0, c: 1]>
+  """
+  @spec put_new_key(t, k, v) :: t
+  def put_new_key(%BiMap{} = bimap, key, value) do
+    if BiMap.has_key?(bimap, key) do
+      bimap
+    else
+      put(bimap, key, value)
+    end
+  end
+
+  @doc """
+  Inserts `{key, value}` pair into `bimap` if `value` is not already in `bimap`.
+
+  If `value` already exists in `bimap`, `bimap` is returned unchanged.
+
+  If `value` does not exist and `key` is already in `bimap`, any overlapping bindings are
+  deleted.
+
+  ## Examples
+
+      iex> bimap = BiMap.new
+      #BiMap<[]>
+      iex> bimap = BiMap.put_new_value(bimap, :a, 0)
+      #BiMap<[a: 0]>
+      iex> bimap = BiMap.put_new_value(bimap, :a, 1)
+      #BiMap<[a: 1]>
+      iex> BiMap.put_new_value(bimap, :b, 1)
+      #BiMap<[a: 1]>
+      iex> BiMap.put_new_value(bimap, :c, 2)
+      #BiMap<[a: 1, c: 2]>
+  """
+  @spec put_new_value(t, k, v) :: t
+  def put_new_value(%BiMap{} = bimap, key, value) do
+    if BiMap.has_value?(bimap, value) do
+      bimap
+    else
+      put(bimap, key, value)
+    end
+  end
+
+  @doc """
   Deletes `{key, value}` pair from `bimap`.
 
   If the `key` does not exist, or `value` does not match, returns `bimap`
