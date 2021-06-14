@@ -21,6 +21,9 @@ jobs:
           - otp: "24"
             elixir: "master"
 
+    env:
+      MIX_ENV: test
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
