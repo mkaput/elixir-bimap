@@ -55,4 +55,4 @@ jobs:
         run: mix credo
 
       - name: Run unit tests
-        run: mix test
+        run: mix test --color --trace
