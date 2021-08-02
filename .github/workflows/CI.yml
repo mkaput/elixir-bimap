@@ -51,8 +51,5 @@ jobs:
       - name: Check for valid formatting
         run: mix format --check-formatted
 
-      - name: Run Credo static code analysis
-        run: mix credo
-
       - name: Run unit tests
         run: mix test --color --trace
