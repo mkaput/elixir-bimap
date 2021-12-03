@@ -22,6 +22,19 @@ defmodule BiMap do
 
   Keys and values are compared using the exact-equality operator (`===`).
 
+  ## Example
+
+      iex> bm = BiMap.new(a: 1, b: 2)
+      #BiMap<[a: 1, b: 2]>
+      iex> BiMap.get(bm, :a)
+      1
+      iex> BiMap.get_key(bm, 2)
+      :b
+      iex> BiMap.put(bm, :a, 3)
+      #BiMap<[a: 3, b: 2]>
+      iex> BiMap.put(bm, :c, 2)
+      #BiMap<[a: 1, c: 2]>
+
   ## Protocols
 
   `BiMap` implements `Enumerable`, `Collectable` and `Inspect` protocols.
