@@ -19,7 +19,7 @@ jobs:
           - otp: "23"
             elixir: "1.10"
           - otp: "24"
-            elixir: "master"
+            elixir: "main"
 
     env:
       MIX_ENV: test
@@ -52,4 +52,4 @@ jobs:
         run: mix format --check-formatted
 
       - name: Run unit tests
-        run: mix test --color --trace
+        run: mix test --color
