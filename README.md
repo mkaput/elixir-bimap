@@ -28,15 +28,15 @@ For more examples, checkout [`BiMap`](https://hexdocs.pm/bimap/BiMap.html) and [
 ```elixir
 iex(1)> Mix.install [:bimap]
 iex(2)> bm = BiMap.new(a: 1, b: 2)
-#BiMap<[a: 1, b: 2]>
+BiMap.new([a: 1, b: 2])
 iex(3)> BiMap.get(bm, :a)
 1
 iex(4)> BiMap.get_key(bm, 2)
 :b
 iex(5)> BiMap.put(bm, :a, 3)
-#BiMap<[a: 3, b: 2]>
+BiMap.new([a: 3, b: 2])
 iex(6)> BiMap.put(bm, :c, 2)
-#BiMap<[a: 1, c: 2]>
+BiMap.new([a: 1, c: 2])
 ```
 
 ### BiMultiMap
@@ -44,13 +44,13 @@ iex(6)> BiMap.put(bm, :c, 2)
 ```elixir
 iex(1)> Mix.install [:bimap]
 iex(2)> mm = BiMultiMap.new(a: 1, b: 2, b: 1)
-#BiMultiMap<[a: 1, b: 1, b: 2]>
+BiMultiMap.new([a: 1, b: 1, b: 2])
 iex(3)> BiMultiMap.get(mm, :a)
 [1]
 iex(4)> BiMultiMap.get_keys(mm, 1)
 [:a, :b]
 iex(5)> BiMultiMap.put(mm, :a, 3)
-#BiMultiMap<[a: 1, a: 3, b: 1, b: 2]>
+BiMultiMap.new([a: 1, a: 3, b: 1, b: 2])
 ```
 
 ## Changelog

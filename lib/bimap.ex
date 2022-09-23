@@ -25,15 +25,15 @@ defmodule BiMap do
   ## Example
 
       iex> bm = BiMap.new(a: 1, b: 2)
-      #BiMap<[a: 1, b: 2]>
+      BiMap.new([a: 1, b: 2])
       iex> BiMap.get(bm, :a)
       1
       iex> BiMap.get_key(bm, 2)
       :b
       iex> BiMap.put(bm, :a, 3)
-      #BiMap<[a: 3, b: 2]>
+      BiMap.new([a: 3, b: 2])
       iex> BiMap.put(bm, :c, 2)
-      #BiMap<[a: 1, c: 2]>
+      BiMap.new([a: 1, c: 2])
 
   ## Protocols
 
@@ -67,7 +67,7 @@ defmodule BiMap do
   ## Examples
 
       iex> BiMap.new
-      #BiMap<[]>
+      BiMap.new([])
   """
   @spec new :: t
   def new, do: %BiMap{}
@@ -80,7 +80,7 @@ defmodule BiMap do
   ## Examples
 
       iex> BiMap.new([a: "foo", b: "bar"])
-      #BiMap<[a: "foo", b: "bar"]>
+      BiMap.new([a: "foo", b: "bar"])
   """
   @spec new(Enum.t()) :: t
   def new(enumerable)
@@ -99,7 +99,7 @@ defmodule BiMap do
   ## Examples
 
       iex> BiMap.new([1, 2, 1], fn x -> {x, x * 2} end)
-      #BiMap<[{1, 2}, {2, 4}]>
+      BiMap.new([{1, 2}, {2, 4}])
   """
   @spec new(Enum.t(), (term -> {k, v})) :: t
   def new(enumerable, transform)
@@ -409,13 +409,13 @@ defmodule BiMap do
   ## Examples
 
       iex> bimap = BiMap.new
-      #BiMap<[]>
+      BiMap.new([])
       iex> bimap = BiMap.put(bimap, :a, 0)
-      #BiMap<[a: 0]>
+      BiMap.new([a: 0])
       iex> bimap = BiMap.put(bimap, :a, 1)
-      #BiMap<[a: 1]>
+      BiMap.new([a: 1])
       iex> BiMap.put(bimap, :b, 1)
-      #BiMap<[b: 1]>
+      BiMap.new([b: 1])
   """
   @spec put(t, k, v) :: t
   def put(%BiMap{} = bimap, key, value) do
@@ -441,15 +441,15 @@ defmodule BiMap do
   ## Examples
 
       iex> bimap = BiMap.new
-      #BiMap<[]>
+      BiMap.new([])
       iex> bimap = BiMap.put_new_key(bimap, :a, 0)
-      #BiMap<[a: 0]>
+      BiMap.new([a: 0])
       iex> bimap = BiMap.put_new_key(bimap, :a, 1)
-      #BiMap<[a: 0]>
+      BiMap.new([a: 0])
       iex> BiMap.put_new_key(bimap, :b, 1)
-      #BiMap<[a: 0, b: 1]>
+      BiMap.new([a: 0, b: 1])
       iex> BiMap.put_new_key(bimap, :c, 1)
-      #BiMap<[a: 0, c: 1]>
+      BiMap.new([a: 0, c: 1])
   """
   @spec put_new_key(t, k, v) :: t
   def put_new_key(%BiMap{} = bimap, key, value) do
@@ -471,15 +471,15 @@ defmodule BiMap do
   ## Examples
 
       iex> bimap = BiMap.new
-      #BiMap<[]>
+      BiMap.new([])
       iex> bimap = BiMap.put_new_value(bimap, :a, 0)
-      #BiMap<[a: 0]>
+      BiMap.new([a: 0])
       iex> bimap = BiMap.put_new_value(bimap, :a, 1)
-      #BiMap<[a: 1]>
+      BiMap.new([a: 1])
       iex> BiMap.put_new_value(bimap, :b, 1)
-      #BiMap<[a: 1]>
+      BiMap.new([a: 1])
       iex> BiMap.put_new_value(bimap, :c, 2)
-      #BiMap<[a: 1, c: 2]>
+      BiMap.new([a: 1, c: 2])
   """
   @spec put_new_value(t, k, v) :: t
   def put_new_value(%BiMap{} = bimap, key, value) do
@@ -500,11 +500,11 @@ defmodule BiMap do
 
       iex> bimap = BiMap.new([a: 1, b: 2])
       iex> BiMap.delete(bimap, :b, 2)
-      #BiMap<[a: 1]>
+      BiMap.new([a: 1])
       iex> BiMap.delete(bimap, :c, 3)
-      #BiMap<[a: 1, b: 2]>
+      BiMap.new([a: 1, b: 2])
       iex> BiMap.delete(bimap, :b, 3)
-      #BiMap<[a: 1, b: 2]>
+      BiMap.new([a: 1, b: 2])
   """
   @spec delete(t, k, v) :: t
   def delete(%BiMap{keys: keys, values: values} = bimap, key, value) do
@@ -526,9 +526,9 @@ defmodule BiMap do
 
       iex> bimap = BiMap.new([a: 1, b: 2])
       iex> BiMap.delete_key(bimap, :b)
-      #BiMap<[a: 1]>
+      BiMap.new([a: 1])
       iex> BiMap.delete_key(bimap, :c)
-      #BiMap<[a: 1, b: 2]>
+      BiMap.new([a: 1, b: 2])
   """
   @spec delete_key(t, k) :: t
   def delete_key(%BiMap{keys: keys, values: values} = bimap, key) do
@@ -550,9 +550,9 @@ defmodule BiMap do
 
       iex> bimap = BiMap.new([a: 1, b: 2])
       iex> BiMap.delete_value(bimap, 2)
-      #BiMap<[a: 1]>
+      BiMap.new([a: 1])
       iex> BiMap.delete_value(bimap, 3)
-      #BiMap<[a: 1, b: 2]>
+      BiMap.new([a: 1, b: 2])
   """
   @spec delete_value(t, v) :: t
   def delete_value(%BiMap{keys: keys, values: values} = bimap, value) do
@@ -621,7 +621,7 @@ defmodule BiMap do
     import Inspect.Algebra
 
     def inspect(bimap, opts) do
-      concat(["#BiMap<", Inspect.List.inspect(BiMap.to_list(bimap), opts), ">"])
+      concat(["BiMap.new(", to_doc(BiMap.to_list(bimap), opts), ")"])
     end
   end
 end
