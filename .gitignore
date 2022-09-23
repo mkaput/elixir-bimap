@@ -8,3 +8,4 @@ erl_crash.dump
 .idea/
 *.iml
 /.vscode/
+.tool-versions
