@@ -30,18 +30,27 @@ defmodule BiMultiMap do
   """
 
   @typedoc "Key type"
-  @type k :: any
+  @type k :: term
 
   @typedoc "Value type"
-  @type v :: any
+  @type v :: term
 
-  @opaque t(k, v) :: %BiMultiMap{
-            keys: %{optional(k) => MapSet.t(v)},
-            values: %{optional(v) => MapSet.t(k)},
-            size: non_neg_integer
-          }
+  @typedoc false
+  @opaque internal_keys(k, v) :: %{optional(k) => MapSet.t(v)}
 
-  @type t :: t(any, any)
+  @typedoc false
+  @opaque internal_values(k, v) :: %{optional(v) => MapSet.t(k)}
+
+  @typedoc false
+  @opaque internal_size :: non_neg_integer
+
+  @type t(k, v) :: %BiMultiMap{
+          keys: internal_keys(k, v),
+          values: internal_values(k, v),
+          size: internal_size
+        }
+
+  @type t :: t(term, term)
 
   defstruct keys: %{}, values: %{}, size: 0
 

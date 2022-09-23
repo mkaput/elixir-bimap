@@ -41,17 +41,23 @@ defmodule BiMap do
   """
 
   @typedoc "Key type"
-  @type k :: any
+  @type k :: term
 
   @typedoc "Value type"
-  @type v :: any
+  @type v :: term
 
-  @opaque t(k, v) :: %BiMap{
-            keys: %{optional(k) => v},
-            values: %{optional(v) => k}
-          }
+  @typedoc false
+  @opaque internal_keys(k, v) :: %{optional(k) => v}
 
-  @type t :: t(any, any)
+  @typedoc false
+  @opaque internal_values(k, v) :: %{optional(v) => k}
+
+  @type t(k, v) :: %BiMap{
+          keys: internal_keys(k, v),
+          values: internal_values(k, v)
+        }
+
+  @type t :: t(term, term)
 
   defstruct keys: %{}, values: %{}
 
