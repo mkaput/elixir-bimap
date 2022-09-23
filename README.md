@@ -53,8 +53,13 @@ iex(5)> BiMultiMap.put(mm, :a, 3)
 #BiMultiMap<[a: 1, a: 3, b: 1, b: 2]>
 ```
 
+## Changelog
+
+All notable changes to this project are documented on the [GitHub releases] page.
+
 ## License
 
 See the [LICENSE] file for license rights and limitations (MIT).
 
-[LICENSE]: https://github.com/mkaput/elixir-bimap/blob/master/LICENSE.txt
+[github releases]: https://github.com/mkaput/elixir-bimap/releases
+[license]: https://github.com/mkaput/elixir-bimap/blob/master/LICENSE.txt

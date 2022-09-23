@@ -15,7 +15,7 @@ defmodule BiMap.Mixfile do
       docs: [
         source_ref: "v#{@version}",
         main: "readme",
-        extras: ~w(README.md CHANGELOG.md)
+        extras: ~w(README.md)
       ],
       deps: deps(),
       package: package()
@@ -46,7 +46,6 @@ defmodule BiMap.Mixfile do
         lib
         mix.exs
         README.md
-        CHANGELOG.md
         LICENSE.txt
       ),
       maintainers: ["Marek Kaput <marek.kaput@outlook.com>"],
