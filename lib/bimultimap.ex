@@ -16,13 +16,13 @@ defmodule BiMultiMap do
   ## Example
 
       iex> mm = BiMultiMap.new(a: 1, b: 2, b: 1)
-      #BiMultiMap<[a: 1, b: 1, b: 2]>
+      BiMultiMap.new([a: 1, b: 1, b: 2])
       iex> BiMultiMap.get(mm, :a)
       [1]
       iex> BiMultiMap.get_keys(mm, 1)
       [:a, :b]
       iex> BiMultiMap.put(mm, :a, 3)
-      #BiMultiMap<[a: 1, a: 3, b: 1, b: 2]>
+      BiMultiMap.new([a: 1, a: 3, b: 1, b: 2])
 
   ## Protocols
 
@@ -60,7 +60,7 @@ defmodule BiMultiMap do
   ## Examples
 
       iex> BiMultiMap.new
-      #BiMultiMap<[]>
+      BiMultiMap.new([])
   """
   @spec new :: t
   def new, do: %BiMultiMap{}
@@ -73,7 +73,7 @@ defmodule BiMultiMap do
   ## Examples
 
       iex> BiMultiMap.new([a: 1, a: 2])
-      #BiMultiMap<[a: 1, a: 2]>
+      BiMultiMap.new([a: 1, a: 2])
   """
   @spec new(Enum.t()) :: t
   def new(enumerable)
@@ -92,7 +92,7 @@ defmodule BiMultiMap do
   ## Examples
 
       iex> BiMultiMap.new([1, 2, 1], fn x -> {x, x * 2} end)
-      #BiMultiMap<[{1, 2}, {2, 4}]>
+      BiMultiMap.new([{1, 2}, {2, 4}])
   """
   @spec new(Enum.t(), (term -> {k, v})) :: t
   def new(enumerable, transform)
@@ -439,13 +439,13 @@ defmodule BiMultiMap do
   ## Examples
 
       iex> bimultimap = BiMultiMap.new
-      #BiMultiMap<[]>
+      BiMultiMap.new([])
       iex> bimultimap = BiMultiMap.put(bimultimap, :a, 1)
-      #BiMultiMap<[a: 1]>
+      BiMultiMap.new([a: 1])
       iex> bimultimap = BiMultiMap.put(bimultimap, :a, 2)
-      #BiMultiMap<[a: 1, a: 2]>
+      BiMultiMap.new([a: 1, a: 2])
       iex> BiMultiMap.put(bimultimap, :b, 2)
-      #BiMultiMap<[a: 1, a: 2, b: 2]>
+      BiMultiMap.new([a: 1, a: 2, b: 2])
   """
   @spec put(t, k, v) :: t
   def put(
@@ -490,9 +490,9 @@ defmodule BiMultiMap do
 
       iex> bimultimap = BiMultiMap.new([a: 1, b: 2, c: 2])
       iex> BiMultiMap.delete(bimultimap, :b, 2)
-      #BiMultiMap<[a: 1, c: 2]>
+      BiMultiMap.new([a: 1, c: 2])
       iex> BiMultiMap.delete(bimultimap, :c, 3)
-      #BiMultiMap<[a: 1, b: 2, c: 2]>
+      BiMultiMap.new([a: 1, b: 2, c: 2])
   """
   @spec delete(t, k, v) :: t
   def delete(
@@ -542,9 +542,9 @@ defmodule BiMultiMap do
 
       iex> bimultimap = BiMultiMap.new([a: 1, b: 2, b: 3])
       iex> BiMultiMap.delete_key(bimultimap, :b)
-      #BiMultiMap<[a: 1]>
+      BiMultiMap.new([a: 1])
       iex> BiMultiMap.delete_key(bimultimap, :c)
-      #BiMultiMap<[a: 1, b: 2, b: 3]>
+      BiMultiMap.new([a: 1, b: 2, b: 3])
   """
   @spec delete_key(t, k) :: t
   def delete_key(%BiMultiMap{keys: keys} = bimultimap, key) do
@@ -568,9 +568,9 @@ defmodule BiMultiMap do
 
       iex> bimultimap = BiMultiMap.new([a: 1, b: 2, c: 1])
       iex> BiMultiMap.delete_value(bimultimap, 1)
-      #BiMultiMap<[b: 2]>
+      BiMultiMap.new([b: 2])
       iex> BiMultiMap.delete_value(bimultimap, 3)
-      #BiMultiMap<[a: 1, b: 2, c: 1]>
+      BiMultiMap.new([a: 1, b: 2, c: 1])
   """
   @spec delete_value(t, v) :: t
   def delete_value(%BiMultiMap{values: values} = bimultimap, value) do
@@ -643,11 +643,7 @@ defmodule BiMultiMap do
     import Inspect.Algebra
 
     def inspect(bimultimap, opts) do
-      concat([
-        "#BiMultiMap<",
-        Inspect.List.inspect(BiMultiMap.to_list(bimultimap), opts),
-        ">"
-      ])
+      concat(["BiMultiMap.new(", to_doc(BiMultiMap.to_list(bimultimap), opts), ")"])
     end
   end
 end
