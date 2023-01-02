@@ -11,15 +11,17 @@ on:
 jobs:
   test:
     name: Elixir ${{matrix.pair.elixir}} / OTP ${{matrix.pair.otp}}
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.pair.os}}
 
     strategy:
       matrix:
         pair:
-          - otp: "24"
+          - otp: "23"
             elixir: "1.10"
+            os: ubuntu-18.04
           - otp: "25"
             elixir: "main"
+            os: ubuntu-latest
 
     env:
       MIX_ENV: test
