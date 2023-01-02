@@ -16,9 +16,9 @@ jobs:
     strategy:
       matrix:
         pair:
-          - otp: "23.3.4.18"
+          - otp: "24"
             elixir: "1.10"
-          - otp: "25.2"
+          - otp: "25"
             elixir: "main"
 
     env:
