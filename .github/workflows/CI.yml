@@ -5,17 +5,15 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
-  schedule:
-    - cron: "0 0 1 */1 *"
 
 jobs:
   test:
-    name: Elixir ${{matrix.pair.elixir}} / OTP ${{matrix.pair.otp}}
-    runs-on: ${{matrix.pair.os}}
+    name: Elixir ${{matrix.elixir}} / OTP ${{matrix.otp}}
+    runs-on: ${{matrix.os}}
 
     strategy:
       matrix:
-        pair:
+        include:
           - otp: "23"
             elixir: "1.10"
             os: ubuntu-18.04
@@ -33,8 +31,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-elixir@v1
         with:
-          elixir-version: ${{ matrix.pair.elixir }}
-          otp-version: ${{ matrix.pair.otp }}
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
 
       - name: Restore deps cache
         uses: actions/cache@v2
@@ -42,10 +40,10 @@ jobs:
           path: |
             deps
             _build
-          key: deps-${{ runner.os }}-${{ matrix.pair.otp }}-${{ matrix.pair.elixir }}-${{ hashFiles('**/mix.lock') }}-${{ github.sha }}
+          key: deps-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}-${{ github.sha }}
           restore-keys: |
-            deps-${{ runner.os }}-${{ matrix.pair.otp }}-${{ matrix.pair.elixir }}-${{ hashFiles('**/mix.lock') }}
-            deps-${{ runner.os }}-${{ matrix.pair.otp }}-${{ matrix.pair.elixir }}
+            deps-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
+            deps-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}
 
       - name: Install package dependencies
         run: mix deps.get
