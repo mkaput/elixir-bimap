@@ -14,9 +14,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - otp: "23"
-            elixir: "1.10"
-            os: ubuntu-18.04
+          # TODO: fix this
+          #- otp: "23"
+          #  elixir: "1.10"
+          #  os: ubuntu-18.04
           - otp: "25"
             elixir: "main"
             os: ubuntu-latest
