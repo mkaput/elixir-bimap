@@ -31,7 +31,7 @@ defmodule BiMap.Mixfile do
   defp deps do
     [
       # Development dependencies
-      {:ex_doc, "~> 0.26", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
       {:stream_data, "~> 0.5.0", only: [:dev, :test]}
     ]
   end
